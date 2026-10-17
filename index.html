@@ -429,7 +429,7 @@
   const C = { paper: '#0d0f2a', box: '#e6246a', label: '#f5b800', muted: '#5b5f8a' };
   const classes = ['person 0.41', 'full_stack 0.72', 'applied_ai 0.88', 'cv_dev 0.93', 'engineer 0.99'];
 
-  let W, H, dpr, particles = [], bounds, start, done = false, landed = false;
+  let W, H, dpr, dot = 2.2, particles = [], bounds, start, done = false, landed = false;
   const mouse = { x: -9999, y: -9999 };
 
   function layout() {
@@ -442,7 +442,7 @@
     const off = document.createElement('canvas');
     off.width = W; off.height = H;
     const o = off.getContext('2d');
-    const size = Math.min(W * (W < 700 ? 0.2 : 0.17), H * 0.34, 240);
+    const size = Math.min(W * (W < 700 ? 0.24 : 0.17), H * 0.34, 240);
     o.font = `800 ${size}px "Bricolage Grotesque", sans-serif`;
     o.textBaseline = 'middle';
     o.textAlign = 'center';
@@ -452,11 +452,12 @@
     lines.forEach((t, i) => o.fillText(t, W / 2, cy + (i - (lines.length - 1) / 2) * size * 0.95));
 
     const data = o.getImageData(0, 0, W, H).data;
-    const gap = W < 700 ? 4 : 5;
+    const gap = W < 700 ? 2.5 : 5;
+    dot = W < 700 ? 2 : 2.2;
     const pts = [];
     let minX = W, minY = H, maxX = 0, maxY = 0;
     for (let y = 0; y < H; y += gap) for (let x = 0; x < W; x += gap) {
-      if (data[(y * W + x) * 4 + 3] > 128) {
+      if (data[(Math.round(y) * W + Math.round(x)) * 4 + 3] > 128) {
         pts.push([x, y]);
         if (x < minX) minX = x; if (x > maxX) maxX = x;
         if (y < minY) minY = y; if (y > maxY) maxY = y;
@@ -529,7 +530,7 @@
         p.x += p.vx; p.y += p.vy;
       }
       ctx.fillStyle = p.hue ? C.box : C.paper;
-      ctx.fillRect(p.x, p.y, 2.2, 2.2);
+      ctx.fillRect(p.x, p.y, dot, dot);
     }
 
     // scan line
