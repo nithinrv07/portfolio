@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/lenis@1.3.4/dist/lenis.css">
+<script>document.documentElement.classList.add('js');</script>
 <style>
   :root {
     --ink: #ffffff;
@@ -198,7 +200,17 @@
     .about { grid-template-columns: 1fr; }
     .timeline li { grid-template-columns: 1fr; gap: 4px; }
   }
+  /* scroll reveal: fade in while gliding up, soft spring settle (same as GSX site) */
+  .js [data-reveal] {
+    opacity: 0; transform: translate3d(0, var(--rise, 150px), 0);
+    transition: opacity 1000ms cubic-bezier(.16, 1, .3, 1), transform 1000ms cubic-bezier(.16, 1, .3, 1);
+    transition-delay: var(--delay, 0ms);
+  }
+  .js [data-reveal].in { opacity: 1; transform: none; }
+  @media (max-width: 767px) { .js [data-reveal] { --rise: 80px; } }
+
   @media (prefers-reduced-motion: reduce) {
+    .js [data-reveal] { opacity: 1; transform: none; transition: none; }
     html { scroll-behavior: auto; }
     .nav, .hero-copy { transition: none; }
   }
@@ -234,9 +246,9 @@
 
 <main>
   <section class="block" id="about" aria-labelledby="about-h">
-    <h2 id="about-h">About</h2>
+    <h2 id="about-h" data-reveal>About</h2>
     <div class="about">
-      <div class="about-side">
+      <div class="about-side" data-reveal>
         <figure class="portrait" id="portrait" hidden>
           <img src="photo.jpg" alt="Nithin R in a navy blazer, smiling, in front of green bamboo">
         </figure>
@@ -246,7 +258,7 @@
           <dt>Open to</dt><dd>Freelance projects, internships and full-time roles</dd>
         </dl>
       </div>
-      <div class="about-main">
+      <div class="about-main" data-reveal data-delay="120">
         <p class="lead">I'm Nithin, an AI &amp; Data Science student at Chennai Institute of Technology who builds secure, intelligent systems end to end.</p>
         <p>I like owning the whole path, from training the model to wiring up the backend. The part I obsess over is the last one: the interface. Spacing, type, motion, how a button feels when you press it. A great model is wasted behind a confusing screen. MedSafe is a good example. It reads prescriptions with a Gemini OCR pipeline, checks for dangerous drug combinations, and keeps every record encrypted on the user's own device.</p>
         <p>Outside of client and internship work, I help run the GDG community at CIT, contribute to GSX Chennai, and compete in hackathons. Most recently I made the national top 7 at a computer vision hackathon at RVCE Bengaluru.</p>
@@ -262,8 +274,8 @@
       </div>
     </div>
 
-    <h3 class="sub skills-h" id="skills">Skills</h3>
-    <div class="skills">
+    <h3 class="sub skills-h" id="skills" data-reveal>Skills</h3>
+    <div class="skills" data-stagger>
       <div><h4>Frontend &amp; interface design</h4><ul class="chips"><li>React 19</li><li>Next.js</li><li>Tailwind CSS</li><li>Framer Motion</li><li>Canvas animation</li><li>Responsive design</li><li>Accessibility</li><li>Design systems</li><li>Micro-interactions</li><li>HTML5</li><li>CSS3</li></ul></div>
       <div><h4>Languages</h4><ul class="chips"><li>Python</li><li>TypeScript</li><li>JavaScript</li><li>Java</li><li>SQL</li></ul></div>
       <div><h4>AI &amp; computer vision</h4><ul class="chips"><li>PyTorch</li><li>TensorFlow</li><li>OpenCV</li><li>Gemini API</li><li>NumPy</li><li>Pandas</li><li>Vector databases</li></ul></div>
@@ -274,8 +286,8 @@
   </section>
 
   <section class="block" id="wins" aria-labelledby="wins-h">
-    <h2 id="wins-h">Proof, not promises</h2>
-    <div class="wins">
+    <h2 id="wins-h" data-reveal>Proof, not promises</h2>
+    <div class="wins" data-stagger>
       <div><b>Top 7 nationally</b><span>Computer vision hackathon, RVCE Bengaluru, 2026</span></div>
       <div><b>First runner-up</b><span>Innovation Expo 2025, hardware + software prototype</span></div>
       <div><b>GDG CIT core team</b><span>Building and running the campus developer community</span></div>
@@ -284,8 +296,8 @@
   </section>
 
   <section class="block" id="projects" aria-labelledby="work-h">
-    <h2 id="work-h">Projects</h2>
-    <ul class="work">
+    <h2 id="work-h" data-reveal>Projects</h2>
+    <ul class="work" data-stagger>
       <li><a href="https://github.com/nithinrv07/MedSafe-Final-" target="_blank" rel="noopener" data-label="medical_ai 0.99">
         <h3>MedSafe</h3>
         <p>A medical records locker with <em>client-side encryption</em>, a Gemini OCR pipeline that reads prescriptions, and drug contraindication checks.</p>
@@ -322,8 +334,8 @@
   </section>
 
   <section class="block" id="experience" aria-labelledby="exp-h">
-    <h2 id="exp-h">Experience</h2>
-    <ol class="timeline">
+    <h2 id="exp-h" data-reveal>Experience</h2>
+    <ol class="timeline" data-stagger>
       <li>
         <div class="when">Current</div>
         <div>
@@ -377,9 +389,9 @@
   </section>
 
   <section class="block contact" id="contact" aria-labelledby="contact-h">
-    <h2 id="contact-h">Got something to build?</h2>
-    <p>I take freelance projects in AI features, web apps and dashboards, and I'm open to internship and full-time interviews.</p>
-    <div class="ctas">
+    <h2 id="contact-h" data-reveal>Got something to build?</h2>
+    <p data-reveal>I take freelance projects in AI features, web apps and dashboards, and I'm open to internship and full-time interviews.</p>
+    <div class="ctas" data-reveal data-delay="120">
       <a class="btn primary" href="mailto:nithinramu7@gmail.com">Email me</a>
       <a class="btn" href="https://linkedin.com/in/nithinr-engineer" target="_blank" rel="noopener">LinkedIn</a>
       <a class="btn" href="https://github.com/nithinrv07" target="_blank" rel="noopener">GitHub</a>
@@ -392,7 +404,34 @@
   <span>Chennai, Tamil Nadu</span>
 </footer>
 
+<script src="https://unpkg.com/lenis@1.3.4/dist/lenis.min.js"></script>
 <script>
+// Smooth inertial scroll + scroll reveals, ported from the GSX Chennai site.
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const desktop = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  // staggered lists: each child reveals 90ms after the previous one
+  document.querySelectorAll('[data-stagger]').forEach(list => {
+    [...list.children].forEach((el, i) => {
+      el.setAttribute('data-reveal', '');
+      el.style.setProperty('--delay', Math.min(i, 8) * 90 + 'ms');
+    });
+  });
+  document.querySelectorAll('[data-delay]').forEach(el => el.style.setProperty('--delay', el.dataset.delay + 'ms'));
+
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }), { threshold: 0.1, rootMargin: '0px 0px -10% 0px' });
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+
+  if (desktop && !reduce && window.Lenis) {
+    addEventListener('intro:done', () => {
+      new Lenis({ autoRaf: true, lerp: 0.09, wheelMultiplier: 0.95, anchors: { offset: -90 } });
+    }, { once: true });
+  }
+})();
+
 (() => {
   // photo: show it only when photo.jpg exists, otherwise keep the NR monogram
   const probe = new Image();
@@ -560,6 +599,7 @@
   function finish() {
     if (done) return;
     done = true;
+    dispatchEvent(new Event('intro:done'));
     document.body.classList.add('ready');
     document.body.classList.remove('locked');
   }
