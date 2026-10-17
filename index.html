@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nithin R — Applied AI &amp; Full-Stack Engineer</title>
+<meta name="description" content="Nithin R builds AI products that ship: computer vision, Gemini-powered apps and secure full-stack systems. Available for freelance work.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #ffffff;
+    --ink-2: #f4f4fa;
+    --paper: #0d0f2a;
+    --muted: #5b5f8a;
+    --box: #e6246a;
+    --label: #f5b800;
+    --line: #e3e4f0;
+    --display: "Bricolage Grotesque", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--display);
+    font-size: 18px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  body.locked { overflow: hidden; }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--box); outline-offset: 4px; }
+
+  /* ---------- nav: floating glass pill ---------- */
+  .nav {
+    position: fixed; top: 16px; left: 50%; z-index: 20;
+    transform: translate(-50%, -12px);
+    width: min(860px, calc(100% - 32px));
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    padding: 8px;
+    background: rgba(255, 255, 255, .72);
+    backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid var(--line); border-radius: 999px;
+    box-shadow: 0 8px 30px rgba(13, 15, 42, .06);
+    opacity: 0; transition: opacity .8s ease, transform .8s ease, box-shadow .3s ease;
+  }
+  .ready .nav { opacity: 1; transform: translate(-50%, 0); }
+  .nav.scrolled { box-shadow: 0 12px 40px rgba(13, 15, 42, .12); }
+  .nav .mark { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; font-size: 15px; padding-right: 8px; }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%; flex: none; position: relative;
+    background: var(--paper) center 20% / cover no-repeat; color: var(--ink);
+    display: grid; place-items: center; font-size: 13px; font-weight: 800;
+    box-shadow: 0 0 0 2px var(--ink), 0 0 0 3.5px var(--box);
+  }
+  .avatar.has-photo span { display: none; }
+  .avatar::after { /* green dot = available for work */
+    content: ""; position: absolute; right: -1px; bottom: -1px; width: 10px; height: 10px;
+    border-radius: 50%; background: #22c55e; border: 2px solid var(--ink);
+  }
+  .nav ul { display: flex; gap: 4px; list-style: none; }
+  .nav ul a {
+    position: relative; display: block; text-decoration: none; color: var(--muted);
+    font-size: 15px; font-weight: 500; padding: 8px 14px; transition: color .2s;
+  }
+  .nav ul a:hover { color: var(--paper); }
+  /* active section gets detection-box corners, same motif as the intro */
+  .nav ul a::before {
+    content: ""; position: absolute; inset: 2px 4px; pointer-events: none;
+    background:
+      linear-gradient(var(--box), var(--box)) 0 0 / 7px 2px, linear-gradient(var(--box), var(--box)) 0 0 / 2px 7px,
+      linear-gradient(var(--box), var(--box)) 100% 0 / 7px 2px, linear-gradient(var(--box), var(--box)) 100% 0 / 2px 7px,
+      linear-gradient(var(--box), var(--box)) 0 100% / 7px 2px, linear-gradient(var(--box), var(--box)) 0 100% / 2px 7px,
+      linear-gradient(var(--box), var(--box)) 100% 100% / 7px 2px, linear-gradient(var(--box), var(--box)) 100% 100% / 2px 7px;
+    background-repeat: no-repeat; opacity: 0; transform: scale(1.15); transition: opacity .2s, transform .2s;
+  }
+  .nav ul a.active { color: var(--paper); }
+  .nav ul a.active::before { opacity: 1; transform: none; }
+  .nav .talk {
+    text-decoration: none; background: var(--paper); color: var(--ink); font-weight: 700; font-size: 14px;
+    padding: 11px 20px; border-radius: 999px; transition: background .2s;
+  }
+  .nav .talk:hover { background: var(--box); }
+  .menu-btn { display: none; width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); background: var(--ink); cursor: pointer; position: relative; }
+  .menu-btn i, .menu-btn i::before { position: absolute; left: 12px; right: 12px; height: 2px; background: var(--paper); content: ""; transition: transform .25s; }
+  .menu-btn i { top: 17px; }
+  .menu-btn i::before { left: 0; right: 0; top: 6px; }
+  .nav.open .menu-btn i { transform: translateY(3px) rotate(45deg); }
+  .nav.open .menu-btn i::before { transform: translateY(-6px) rotate(-90deg); }
+
+  /* ---------- hero ---------- */
+  .hero { position: relative; height: 100svh; min-height: 560px; }
+  #field { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .hero-copy {
+    position: absolute; left: clamp(16px, 5vw, 64px); right: clamp(16px, 5vw, 64px); bottom: clamp(32px, 9vh, 96px);
+    display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap;
+    opacity: 0; transform: translateY(16px); transition: opacity .9s ease, transform .9s ease;
+  }
+  .ready .hero-copy { opacity: 1; transform: none; }
+  .hero-copy p { max-width: 30ch; font-size: clamp(20px, 2.2vw, 28px); line-height: 1.3; font-weight: 500; }
+  .hero-copy p span { color: var(--muted); }
+  .ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; text-decoration: none; font-weight: 700; font-size: 16px;
+    padding: 14px 22px; border: 2px solid var(--paper); transition: background .2s, color .2s;
+  }
+  .btn.primary { background: var(--paper); color: var(--ink); }
+  .btn.primary:hover { background: var(--label); border-color: var(--label); color: var(--paper); }
+  .btn:not(.primary):hover { background: var(--paper); color: var(--ink); }
+
+  .skip {
+    position: absolute; right: clamp(16px, 5vw, 64px); top: 24px; z-index: 30;
+    background: none; border: 1px solid var(--line); color: var(--muted);
+    font: 500 13px var(--mono); padding: 6px 12px; cursor: pointer;
+  }
+  .ready .skip { display: none; }
+
+  /* ---------- sections ---------- */
+  section.block { padding: clamp(72px, 12vw, 140px) clamp(16px, 5vw, 64px); max-width: 1240px; margin: 0 auto; }
+  h2 { font-size: clamp(36px, 6vw, 72px); line-height: 1; letter-spacing: -.035em; font-weight: 800; margin-bottom: 40px; }
+
+  .wins { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px; border-top: 1px solid var(--line); padding-top: 32px; }
+  .wins div b { display: block; font-size: 26px; line-height: 1.15; letter-spacing: -.02em; margin-bottom: 6px; }
+  .wins div span { color: var(--muted); font-size: 16px; }
+
+  /* projects as a detection list */
+  .work { list-style: none; border-top: 1px solid var(--line); }
+  .work li { position: relative; border-bottom: 1px solid var(--line); }
+  .work a, .work .row {
+    display: grid; grid-template-columns: minmax(180px, 1.1fr) 2fr auto; gap: 24px; align-items: baseline;
+    padding: 28px 12px; text-decoration: none; position: relative;
+  }
+  .work h3 { font-size: clamp(24px, 3vw, 36px); letter-spacing: -.025em; line-height: 1.1; font-weight: 700; }
+  .work p { color: var(--muted); font-size: 17px; max-width: 52ch; }
+  .work p em { font-style: normal; color: var(--paper); }
+  .work .go { font-family: var(--mono); font-size: 13px; color: var(--muted); white-space: nowrap; }
+  /* bounding box on hover/focus */
+  .work a::before, .work .row::before {
+    content: ""; position: absolute; inset: 6px -6px; border: 2px solid var(--box);
+    opacity: 0; transform: scale(1.02); transition: opacity .18s, transform .18s; pointer-events: none;
+  }
+  .work a::after, .work .row::after {
+    content: attr(data-label); position: absolute; left: -6px; top: -16px;
+    background: var(--box); color: var(--ink); font: 500 12px var(--mono); padding: 2px 8px;
+    opacity: 0; transition: opacity .18s; pointer-events: none;
+  }
+  .work a:hover::before, .work a:focus-visible::before, .work .row:hover::before { opacity: 1; transform: none; }
+  .work a:hover::after, .work a:focus-visible::after, .work .row:hover::after { opacity: 1; }
+  .work a:hover .go { color: var(--box); }
+  .work a:focus-visible { outline: none; }
+
+  .timeline { list-style: none; border-top: 1px solid var(--line); }
+  .timeline li { display: grid; grid-template-columns: 160px 1fr; gap: 24px; padding: 28px 0; border-bottom: 1px solid var(--line); }
+  .timeline .when { font: 500 13px var(--mono); color: var(--box); padding-top: 8px; }
+  .timeline h3 { font-size: clamp(22px, 2.6vw, 30px); letter-spacing: -.02em; line-height: 1.15; font-weight: 700; }
+  .timeline h3 span { display: block; font-size: 17px; font-weight: 500; color: var(--muted); letter-spacing: 0; margin-top: 4px; }
+  .timeline p { color: var(--muted); font-size: 17px; max-width: 62ch; margin-top: 10px; }
+
+  .about { display: grid; grid-template-columns: minmax(240px, 340px) 1fr; gap: clamp(32px, 6vw, 80px); align-items: start; }
+  .portrait { position: relative; margin: 0 0 32px; max-width: 340px; }
+  .portrait img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: center 25%; }
+  .about .lead { font-size: clamp(22px, 2.4vw, 30px); line-height: 1.35; letter-spacing: -.01em; }
+  .about-main p + p { margin-top: 16px; }
+  .about-main .lead + p { margin-top: 20px; }
+  .about-main p:not(.lead) { color: var(--muted); max-width: 60ch; }
+  .facts { border-top: 1px solid var(--line); max-width: 340px; }
+  .facts dt { font: 500 12px var(--mono); color: var(--box); margin-top: 16px; }
+  .facts dd { font-size: 16px; line-height: 1.4; }
+  h3.sub { font-size: clamp(24px, 2.6vw, 32px); letter-spacing: -.02em; font-weight: 800; margin: 48px 0 16px; }
+  .does { list-style: none; border-top: 1px solid var(--line); }
+  .does li { padding: 16px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 17px; }
+  .does b { color: var(--paper); font-weight: 700; }
+  .skills-h { margin-top: clamp(56px, 8vw, 96px); }
+  .skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 32px 40px; border-top: 1px solid var(--line); padding-top: 28px; }
+  .skills h4 { font-size: 17px; font-weight: 700; margin-bottom: 12px; }
+  .chips { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips li { font-size: 15px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--ink-2); transition: border-color .2s, color .2s; }
+  .chips li:hover { border-color: var(--box); color: var(--box); }
+
+  .contact { text-align: left; }
+  .contact h2 { font-size: clamp(48px, 10vw, 140px); max-width: 12ch; }
+  .contact p { color: var(--muted); max-width: 46ch; margin-bottom: 32px; }
+
+  footer { padding: 32px clamp(16px, 5vw, 64px); color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+  @media (max-width: 760px) {
+    .nav { border-radius: 26px; flex-wrap: wrap; }
+    .nav .talk { display: none; }
+    .menu-btn { display: block; }
+    .nav ul { display: none; order: 3; width: 100%; flex-direction: column; padding: 4px 0 8px; }
+    .nav.open ul { display: flex; }
+    .nav ul a { font-size: 18px; padding: 12px 14px; }
+    .work a, .work .row { grid-template-columns: 1fr; gap: 6px; }
+    .about { grid-template-columns: 1fr; }
+    .timeline li { grid-template-columns: 1fr; gap: 4px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .nav, .hero-copy { transition: none; }
+  }
+</style>
+</head>
+<body class="locked">
+
+<nav class="nav" aria-label="Main">
+  <a class="mark" href="#top" aria-label="Nithin R, back to top">
+    <span class="avatar"><span>NR</span></span>
+    Nithin R
+  </a>
+  <ul id="menu">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+  </ul>
+  <a class="talk" href="#contact">Let's talk</a>
+  <button class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i></button>
+</nav>
+
+<header class="hero" id="top">
+  <canvas id="field" aria-label="Animated particles forming the name Nithin R" role="img"></canvas>
+  <button class="skip" id="skip">Skip intro</button>
+  <div class="hero-copy">
+    <p>Applied AI &amp; full-stack engineer from Chennai. <span>I turn models into products people actually enjoy using.</span></p>
+    <div class="ctas">
+      <a class="btn primary" href="#contact">Start a project</a>
+      <a class="btn" href="#projects">See my work</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="block" id="about" aria-labelledby="about-h">
+    <h2 id="about-h">About</h2>
+    <div class="about">
+      <div class="about-side">
+        <figure class="portrait" id="portrait" hidden>
+          <img src="photo.jpg" alt="Nithin R in a navy blazer, smiling, in front of green bamboo">
+        </figure>
+        <dl class="facts">
+          <dt>Based in</dt><dd>Chennai, Tamil Nadu</dd>
+          <dt>Studying</dt><dd>B.Tech, AI &amp; Data Science, Chennai Institute of Technology</dd>
+          <dt>Open to</dt><dd>Freelance projects, internships and full-time roles</dd>
+        </dl>
+      </div>
+      <div class="about-main">
+        <p class="lead">I'm Nithin, an AI &amp; Data Science student at Chennai Institute of Technology who builds secure, intelligent systems end to end.</p>
+        <p>I like owning the whole path, from training the model to wiring up the backend. The part I obsess over is the last one: the interface. Spacing, type, motion, how a button feels when you press it. A great model is wasted behind a confusing screen. MedSafe is a good example. It reads prescriptions with a Gemini OCR pipeline, checks for dangerous drug combinations, and keeps every record encrypted on the user's own device.</p>
+        <p>Outside of client and internship work, I help run the GDG community at CIT, contribute to GSX Chennai, and compete in hackathons. Most recently I made the national top 7 at a computer vision hackathon at RVCE Bengaluru.</p>
+        <p>Right now I'm digging into scalable microservices, vector databases and vision transformers.</p>
+        <h3 class="sub">What I can build for you</h3>
+        <ul class="does">
+          <li><b>Interfaces people enjoy using.</b> Fast, responsive React and Next.js frontends with clean layouts, smooth motion and accessibility built in. You're scrolling through one.</li>
+          <li><b>AI features that work in production.</b> OCR, chat, classification and computer vision, built on Gemini, PyTorch or OpenCV.</li>
+          <li><b>Full-stack web apps.</b> From the database to the deploy, built to stay fast and easy to maintain.</li>
+          <li><b>Secure systems.</b> Client-side encryption, audit trails and safe handling of sensitive data.</li>
+          <li><b>Dashboards and internal tools.</b> Turning spreadsheets and manual processes into clean web apps.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="sub skills-h" id="skills">Skills</h3>
+    <div class="skills">
+      <div><h4>Frontend &amp; interface design</h4><ul class="chips"><li>React 19</li><li>Next.js</li><li>Tailwind CSS</li><li>Framer Motion</li><li>Canvas animation</li><li>Responsive design</li><li>Accessibility</li><li>Design systems</li><li>Micro-interactions</li><li>HTML5</li><li>CSS3</li></ul></div>
+      <div><h4>Languages</h4><ul class="chips"><li>Python</li><li>TypeScript</li><li>JavaScript</li><li>Java</li><li>SQL</li></ul></div>
+      <div><h4>AI &amp; computer vision</h4><ul class="chips"><li>PyTorch</li><li>TensorFlow</li><li>OpenCV</li><li>Gemini API</li><li>NumPy</li><li>Pandas</li><li>Vector databases</li></ul></div>
+      <div><h4>Backend &amp; data</h4><ul class="chips"><li>Node.js</li><li>Express.js</li><li>Firebase</li><li>Supabase</li><li>MongoDB</li><li>MySQL</li></ul></div>
+      <div><h4>Cloud &amp; tools</h4><ul class="chips"><li>AWS</li><li>Docker</li><li>Linux</li><li>Git</li><li>Vercel</li></ul></div>
+      <div><h4>Security</h4><ul class="chips"><li>AES-256 / RSA encryption</li><li>Zero-knowledge design</li><li>SHA-256 audit trails</li></ul></div>
+    </div>
+  </section>
+
+  <section class="block" id="wins" aria-labelledby="wins-h">
+    <h2 id="wins-h">Proof, not promises</h2>
+    <div class="wins">
+      <div><b>Top 7 nationally</b><span>Computer vision hackathon, RVCE Bengaluru, 2026</span></div>
+      <div><b>First runner-up</b><span>Innovation Expo 2025, hardware + software prototype</span></div>
+      <div><b>GDG CIT core team</b><span>Building and running the campus developer community</span></div>
+      <div><b>Google &amp; AWS backed</b><span>AI/ML and cloud internships via Google for Developers and AWS Educate</span></div>
+    </div>
+  </section>
+
+  <section class="block" id="projects" aria-labelledby="work-h">
+    <h2 id="work-h">Projects</h2>
+    <ul class="work">
+      <li><a href="https://github.com/nithinrv07/MedSafe-Final-" target="_blank" rel="noopener" data-label="medical_ai 0.99">
+        <h3>MedSafe</h3>
+        <p>A medical records locker with <em>client-side encryption</em>, a Gemini OCR pipeline that reads prescriptions, and drug contraindication checks.</p>
+        <span class="go">GitHub ↗</span></a></li>
+      <li><a href="https://github.com/nithinrv07/Argus-Ledger" target="_blank" rel="noopener" data-label="ai_safety 0.99">
+        <h3>Argus Ledger</h3>
+        <p>An open-source security layer for AI agents. It screens risky actions like money transfers, then <em>allows, escalates or blocks</em> them with a plain-English reason, on a tamper-evident SHA-256 audit trail.</p>
+        <span class="go">GitHub ↗</span></a></li>
+      <li><a href="https://wobble-project.vercel.app" target="_blank" rel="noopener" data-label="healthcare 0.97">
+        <h3>ClinicQ</h3>
+        <p>OPD queue management for Indian clinics: a reception console and a patient portal with <em>live wait times</em>, voice announcements, priority triage and 13 languages.</p>
+        <span class="go">Live ↗</span></a></li>
+      <li><div class="row" data-label="computer_vision 0.98">
+        <h3>Masked face recognition</h3>
+        <p>A <em>real-time</em> pipeline that identifies people even when they're wearing face masks.</p>
+        <span class="go">Case study soon</span></div></li>
+      <li><a href="https://chennai-metro-ml.vercel.app" target="_blank" rel="noopener" data-label="ml_forecast 0.97">
+        <h3>Chennai Metro ML</h3>
+        <p>Machine learning on Chennai Metro data, shipped as a <em>live web app</em>.</p>
+        <span class="go">Live ↗</span></a></li>
+      <li><a href="https://finsecure-olive.vercel.app" target="_blank" rel="noopener" data-label="security 0.97">
+        <h3>FinSecure</h3>
+        <p>A security-first <em>personal finance</em> web app.</p>
+        <span class="go">Live ↗</span></a></li>
+      <li><a href="https://gdg-cit-nu.vercel.app/" target="_blank" rel="noopener" data-label="community 0.98">
+        <h3>GDG CIT Web Platform</h3>
+        <p>The official platform for the Google Developer Groups chapter at CIT, with <em>event registration</em> and student member dashboards.</p>
+        <span class="go">Live ↗</span></a></li>
+      <li><a href="https://gsx-chennai-chapter.vercel.app" target="_blank" rel="noopener" data-label="community 0.99">
+        <h3>GSX Chennai Chapter</h3>
+        <p>The official site for the GSX open-source community's Chennai chapter.</p>
+        <span class="go">Live ↗</span></a></li>
+    </ul>
+  </section>
+
+  <section class="block" id="experience" aria-labelledby="exp-h">
+    <h2 id="exp-h">Experience</h2>
+    <ol class="timeline">
+      <li>
+        <div class="when">Current</div>
+        <div>
+          <h3>Core Team Member <span>GDG CIT, Google Developer Groups</span></h3>
+          <p>Help run the campus developer community at Chennai Institute of Technology: workshops, tech talks and hackathons. Built the chapter's web platform with event registration and member dashboards.</p>
+        </div>
+      </li>
+      <li>
+        <div class="when">Current</div>
+        <div>
+          <h3>Member <span>GSX Chennai Chapter</span></h3>
+          <p>Contribute to the GSX open-source community and built and maintain the Chennai chapter's website.</p>
+        </div>
+      </li>
+      <li>
+        <div class="when">Volunteer</div>
+        <div>
+          <h3>Project Officer <span>TN Volunteers</span></h3>
+          <p>Plan and coordinate volunteer projects across Tamil Nadu.</p>
+        </div>
+      </li>
+      <li>
+        <div class="when">Internship</div>
+        <div>
+          <h3>Web Developer Intern <span>DYNX Solutions</span></h3>
+          <p>Built and shipped websites and web app features for DYNX Solutions clients.</p>
+        </div>
+      </li>
+      <li>
+        <div class="when">Internship</div>
+        <div>
+          <h3>Software Developer Intern <span>UMS Scales</span></h3>
+          <p>Building UMS Books, an online accounting platform for businesses covering invoicing, expenses and financial reports.</p>
+        </div>
+      </li>
+      <li>
+        <div class="when">Internship</div>
+        <div>
+          <h3>AI/ML Intern <span>Google for Developers</span></h3>
+          <p>Worked on applied machine learning projects through the Google for Developers internship program.</p>
+        </div>
+      </li>
+      <li>
+        <div class="when">Internship</div>
+        <div>
+          <h3>Cloud Intern <span>AWS Educate</span></h3>
+          <p>Built and deployed cloud workloads on AWS through the AWS Educate internship program.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="block contact" id="contact" aria-labelledby="contact-h">
+    <h2 id="contact-h">Got something to build?</h2>
+    <p>I take freelance projects in AI features, web apps and dashboards, and I'm open to internship and full-time interviews.</p>
+    <div class="ctas">
+      <a class="btn primary" href="mailto:nithinramu7@gmail.com">Email me</a>
+      <a class="btn" href="https://linkedin.com/in/nithinr-engineer" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/nithinrv07" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>© 2026 Nithin R</span>
+  <span>Chennai, Tamil Nadu</span>
+</footer>
+
+<script>
+(() => {
+  // photo: show it only when photo.jpg exists, otherwise keep the NR monogram
+  const probe = new Image();
+  probe.onload = () => {
+    const av = document.querySelector('.avatar');
+    av.style.backgroundImage = 'url(photo.jpg)';
+    av.classList.add('has-photo');
+    document.getElementById('portrait').hidden = false;
+  };
+  probe.src = 'photo.jpg';
+
+  const nav = document.querySelector('.nav');
+  const btn = nav.querySelector('.menu-btn');
+  const setOpen = open => {
+    nav.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open);
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  };
+  btn.addEventListener('click', () => setOpen(!nav.classList.contains('open')));
+  nav.querySelectorAll('ul a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+  addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40), { passive: true });
+
+  const links = [...nav.querySelectorAll('ul a')];
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+  }), { rootMargin: '-45% 0px -50% 0px' });
+  ['about', 'projects', 'experience'].forEach(id => io.observe(document.getElementById(id)));
+})();
+
+(() => {
+  const canvas = document.getElementById('field');
+  const ctx = canvas.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const C = { paper: '#0d0f2a', box: '#e6246a', label: '#f5b800', muted: '#5b5f8a' };
+  const classes = ['person 0.41', 'full_stack 0.72', 'applied_ai 0.88', 'cv_dev 0.93', 'engineer 0.99'];
+
+  let W, H, dpr, particles = [], bounds, start, done = false, landed = false;
+  const mouse = { x: -9999, y: -9999 };
+
+  function layout() {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // sample the name into target points
+    const off = document.createElement('canvas');
+    off.width = W; off.height = H;
+    const o = off.getContext('2d');
+    const size = Math.min(W * (W < 700 ? 0.2 : 0.17), H * 0.34, 240);
+    o.font = `800 ${size}px "Bricolage Grotesque", sans-serif`;
+    o.textBaseline = 'middle';
+    o.textAlign = 'center';
+    o.fillStyle = '#fff';
+    const lines = W < 700 ? ['NITHIN', 'R'] : ['NITHIN R'];
+    const cy = H * (W < 700 ? 0.36 : 0.42);
+    lines.forEach((t, i) => o.fillText(t, W / 2, cy + (i - (lines.length - 1) / 2) * size * 0.95));
+
+    const data = o.getImageData(0, 0, W, H).data;
+    const gap = W < 700 ? 4 : 5;
+    const pts = [];
+    let minX = W, minY = H, maxX = 0, maxY = 0;
+    for (let y = 0; y < H; y += gap) for (let x = 0; x < W; x += gap) {
+      if (data[(y * W + x) * 4 + 3] > 128) {
+        pts.push([x, y]);
+        if (x < minX) minX = x; if (x > maxX) maxX = x;
+        if (y < minY) minY = y; if (y > maxY) maxY = y;
+      }
+    }
+    const pad = 18;
+    bounds = { x: minX - pad, y: minY - pad, w: maxX - minX + pad * 2, h: maxY - minY + pad * 2 };
+
+    const old = particles;
+    particles = pts.map(([tx, ty], i) => {
+      const p = old[i];
+      const x = p ? p.x : Math.random() * W, y = p ? p.y : Math.random() * H;
+      return {
+        tx, ty, x, y, sx: x, sy: y,
+        vx: 0, vy: 0,
+        delay: Math.random() * 0.6,
+        hue: Math.random() < 0.06
+      };
+    });
+  }
+
+  const ease = t => 1 - Math.pow(1 - Math.min(Math.max(t, 0), 1), 3);
+
+  function drawBox(progress, labelText) {
+    const { x, y, w, h } = bounds;
+    const per = 2 * (w + h);
+    ctx.save();
+    ctx.strokeStyle = C.box; ctx.lineWidth = 2;
+    ctx.setLineDash([per * progress, per]);
+    ctx.strokeRect(x, y, w, h);
+    ctx.setLineDash([]);
+    if (progress >= 1 && labelText) {
+      ctx.font = '500 14px "JetBrains Mono", monospace';
+      const tw = ctx.measureText(labelText).width + 16;
+      ctx.fillStyle = C.box;
+      ctx.fillRect(x - 1, y - 24, tw, 24);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(labelText, x + 7, y - 7);
+      // corner ticks
+      ctx.fillStyle = C.label;
+      [[x, y + h], [x + w, y], [x + w, y + h]].forEach(([cx, cy]) => ctx.fillRect(cx - 3, cy - 3, 6, 6));
+    }
+    ctx.restore();
+  }
+
+  function frame(now) {
+    if (!start) start = now;
+    const t = reduce ? 99 : (now - start) / 1000;
+    ctx.clearRect(0, 0, W, H);
+
+    // particles: snap home once the fly-in window ends, even if frames were dropped
+    if (!landed && (t >= 2.2 || done)) {
+      landed = true;
+      particles.forEach(p => { p.x = p.tx; p.y = p.ty; });
+    }
+    for (const p of particles) {
+      if (t < 2.2 && !done) {
+        const k = ease((t - p.delay) / 1.4);
+        p.x = p.sx + (p.tx - p.sx) * k;
+        p.y = p.sy + (p.ty - p.sy) * k;
+      } else {
+        const dx = p.x - mouse.x, dy = p.y - mouse.y;
+        const d2 = dx * dx + dy * dy, R = 110;
+        if (d2 < R * R) {
+          const d = Math.sqrt(d2) || 1, f = (R - d) / R * 6;
+          p.vx += dx / d * f; p.vy += dy / d * f;
+        }
+        p.vx += (p.tx - p.x) * 0.06; p.vy += (p.ty - p.y) * 0.06;
+        p.vx *= 0.78; p.vy *= 0.78;
+        p.x += p.vx; p.y += p.vy;
+      }
+      ctx.fillStyle = p.hue ? C.box : C.paper;
+      ctx.fillRect(p.x, p.y, 2.2, 2.2);
+    }
+
+    // scan line
+    if (!done && t > 1.6 && t < 2.6) {
+      const k = ease((t - 1.6) / 1.0);
+      const sy = bounds.y + bounds.h * k;
+      const g = ctx.createLinearGradient(0, sy - 40, 0, sy);
+      g.addColorStop(0, 'rgba(245,184,0,0)');
+      g.addColorStop(1, 'rgba(245,184,0,.3)');
+      ctx.fillStyle = g;
+      ctx.fillRect(bounds.x, sy - 40, bounds.w, 40);
+      ctx.fillStyle = C.label;
+      ctx.fillRect(bounds.x, sy, bounds.w, 2);
+    }
+
+    // detection box + label classifier cycle
+    if (done || t > 2.5) {
+      const bp = done ? 1 : ease((t - 2.5) / 0.5);
+      const idx = done ? classes.length - 1 : Math.min(classes.length - 1, Math.floor(Math.max(0, t - 3.0) / 0.22));
+      drawBox(bp, bp >= 1 ? classes[idx] : '');
+    }
+
+    if (!done && t > 4.2) finish();
+    requestAnimationFrame(frame);
+  }
+
+  function finish() {
+    if (done) return;
+    done = true;
+    document.body.classList.add('ready');
+    document.body.classList.remove('locked');
+  }
+
+  addEventListener('pointermove', e => {
+    const r = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+  });
+  addEventListener('pointerleave', () => { mouse.x = mouse.y = -9999; });
+  document.getElementById('skip').addEventListener('click', () => {
+    particles.forEach(p => { p.x = p.tx; p.y = p.ty; });
+    finish();
+  });
+  addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('skip').click(); });
+
+  let rt;
+  addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(layout, 120); });
+
+  document.fonts.load('800 100px "Bricolage Grotesque"').finally(() => {
+    layout();
+    if (reduce) finish();
+    setTimeout(finish, 4600);
+    requestAnimationFrame(frame);
+  });
+})();
+</script>
+</body>
+</html>
