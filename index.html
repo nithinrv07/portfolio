@@ -230,6 +230,7 @@
     <li><a href="#about">About</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#experience">Experience</a></li>
+    <li><a href="#education">Education</a></li>
   </ul>
   <a class="talk" href="#contact">Let's talk</a>
   <button class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i></button>
@@ -492,7 +493,7 @@
   const io = new IntersectionObserver(entries => entries.forEach(e => {
     if (e.isIntersecting) links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
   }), { rootMargin: '-45% 0px -50% 0px' });
-  ['about', 'projects', 'experience'].forEach(id => io.observe(document.getElementById(id)));
+  ['about', 'projects', 'experience', 'education'].forEach(id => io.observe(document.getElementById(id)));
 })();
 
 (() => {
